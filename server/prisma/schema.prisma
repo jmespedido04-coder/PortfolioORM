@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// One row: the person this portfolio is about.
+model Profile {
+  id        Int     @id @default(1)
+  name      String
+  headline  String
+  bio       String
+  location  String
+  email     String
+  avatarUrl String? // null = the UI shows the "profile photo goes here" frame
+}
+
+model Project {
+  id       Int     @id @default(autoincrement())
+  title    String
+  summary  String
+  tags     String  @default("") // comma-separated (SQLite has no list type)
+  url      String?
+  repoUrl  String?
+  imageUrl String?  // null = the UI shows an image placeholder
+  order    Int     @default(0)
+}
+
+model Skill {
+  id       Int    @id @default(autoincrement())
+  name     String
+  category String
+  level    Int    @default(3) // 1 to 5
+  order    Int    @default(0)
+}
+
+model Experience {
+  id          Int     @id @default(autoincrement())
+  role        String
+  company     String
+  startDate   String // free text, e.g. "2022"
+  endDate     String? // null = "Present"
+  description String
+  order       Int     @default(0)
+}
+
+model Link {
+  id    Int    @id @default(autoincrement())
+  label String
+  url   String
+  order Int    @default(0)
+}
+
+// Written by the contact form.
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  body      String
+  createdAt DateTime @default(now())
+}
